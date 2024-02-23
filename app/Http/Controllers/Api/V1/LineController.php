@@ -49,6 +49,7 @@ class LineController extends Controller
 
             $replyToken = $event->replyToken;
             $messageText = $event->message->text;
+            Log::debug($replyToken);
 
             switch ($messageText) {
                 case '今日の天気は？':
