@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Services\Deliverer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot;
@@ -15,12 +16,8 @@ class LineController extends Controller
     // メッセージ送信
     public function delivery()
     {
-        // 1. 登録されている友だちにメッセージを送信
-        $httpClient = new CurlHTTPClient(env('LINE_CHANNEL_ACCESS_TOKEN'));
-        $bot = new LINEBot($httpClient, ['channelSecret' => env('CHANNEL_SECRET')]);
-
-        $textBuilder = new TextMessageBuilder('Hello LINE!');
-        $bot->broadcast($textBuilder);
+        $deliverer = new Deliverer(env('LINE_CHANNEL_ACCESS_TOKEN'), env('LINE_CHANNEL_SECRET'));
+        $deliverer->deliveryAll('test');
 
         return response()->json(['message' => 'sent']);
     }
@@ -71,14 +68,9 @@ class LineController extends Controller
                     }
             }
             // 3. 返信メッセージを返信先に送信
-            $httpClient = new CurlHTTPClient(env('LINE_CHANNEL_ACCESS_TOKEN'));
-            $bot = new LINEBot($httpClient, ['channelSecret' => env('CHANNEL_SECRET')]);
-            $messageBuilder = new TextMessageBuilder($replyMessage);
-            $response = $bot->replyMessage($replyToken, $messageBuilder);
 
-            if (!$response->isSucceeded()) {
-                Log::error($response->getRawBody());
-            }
+            $deliverer = new Deliverer(env('LINE_CHANNEL_ACCESS_TOKEN', env('LINE_CHANNEL_SECRET')));
+            $deliverer->reply($replyToken, $replyMessage);
         }
 
         return response()->json(['message' => 'received']);
