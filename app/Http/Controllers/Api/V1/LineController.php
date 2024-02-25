@@ -27,7 +27,6 @@ class LineController extends Controller
     public function callback(Request $request)
     {
         // TODO: ここに具体的に実装
-
         // 1. 受け取った情報からメッセージの情報を取り出す
         $parser = new RequestParser($request->getContent());
         $receivedMessages = $parser->getReceivedMessages();
@@ -35,14 +34,16 @@ class LineController extends Controller
             return response()->json(['message' => 'received']);
         }
 
+        $generator = new ReplyMessageGenerator();
+        $deliverer = new Deliverer(env('LINE_CHANNEL_ACCESS_TOKEN'), env('LINE_CHANNEL_SECRET'));
+
         foreach ($receivedMessages as $receivedMessage) {
             //　2. 受け取ったメッセージの内容から返信するメッセージを作成
-            $generator = new ReplyMessageGenerator();
+
             $replyMessage = $generator->generate($receivedMessage->getText());
 
             // 3. 返信メッセージを返信先に送信
 
-            $deliverer = new Deliverer(env('LINE_CHANNEL_ACCESS_TOKEN'), env('LINE_CHANNEL_SECRET'));
             $deliverer->reply($receivedMessage->getReplToken(), $replyMessage);
         }
 
