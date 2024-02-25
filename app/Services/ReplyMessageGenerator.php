@@ -18,7 +18,7 @@ class ReplyMessageGenerator
                 $replyMessage = 'アブド＝アッラフマーン３世';
                 break;
             default:
-                if (strpos($messageText, '？') !== false) {
+                if (strpos($text, '？') !== false) {
                     // 疑問符が含まれている場合(部分一致)
                     $replyMessage = '「今日の天気は？」という質問に答える事ができますよ！';
                 } else {

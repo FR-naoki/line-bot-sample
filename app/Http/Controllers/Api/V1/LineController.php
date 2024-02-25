@@ -29,34 +29,21 @@ class LineController extends Controller
         // TODO: ここに具体的に実装
 
         // 1. 受け取った情報からメッセージの情報を取り出す
-        Log::debug($request->getContent());
-        $eventsObj = json_decode($request->getContent());
-        if (is_null($eventsObj) || is_null($eventsObj->events)) {
-            return response()->json(['message' => 'received(no events)']);
+        $parser = new RequestParser($request->getContent());
+        $receivedMessages = $parser->getReceivedMessages();
+        if ($receivedMessages->isEmpty()) {
+            return response()->json(['message' => 'received']);
         }
 
-        foreach ($eventsObj->events as $event) {
-            // eventのtypeのチェック（messageかどうか）
-            if ($event->type !== 'message') {
-                continue;
-            }
-            // messageのtypeのチェック（textかどうか）
-            if ($event->message->type !== 'text') {
-                continue;
-            }
-
-            $replyToken = $event->replyToken;
-            $messageText = $event->message->text;
-            Log::debug($replyToken);
-
+        foreach ($receivedMessages as $receivedMessage) {
             //　2. 受け取ったメッセージの内容から返信するメッセージを作成
             $generator = new ReplyMessageGenerator();
-            $replyMessage = $generator->generate($messageText);
+            $replyMessage = $generator->generate($receivedMessage->getText());
 
             // 3. 返信メッセージを返信先に送信
 
-            $deliverer = new Deliverer(env('LINE_CHANNEL_ACCESS_TOKEN', env('LINE_CHANNEL_SECRET')));
-            $deliverer->reply($replyToken, $replyMessage);
+            $deliverer = new Deliverer(env('LINE_CHANNEL_ACCESS_TOKEN'), env('LINE_CHANNEL_SECRET'));
+            $deliverer->reply($receivedMessage->getReplToken(), $replyMessage);
         }
 
         return response()->json(['message' => 'received']);
