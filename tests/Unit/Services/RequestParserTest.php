@@ -2,17 +2,46 @@
 
 namespace Tests\Unit\Services;
 
+use App\Models\ReceivedMessage;
+use App\Services\RequestParser;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\TestCase;
 
 class RequestParserTest extends TestCase
 {
     /**
-     * A basic unit test example.
+     * 受け取ったリクエストからメッセージ情報を生成できる
+     * 
+     * @dataProvider requestDataProvider
      *
      * @return void
      */
-    public function test_example()
+    public function testGetReceivedMessages($expected, $content)
     {
-        $this->assertTrue(true);
+        $parser = new RequestParser($content);
+
+        // ※オブジェクトの比較の場合はassertSameを使えない
+        $this->assertEquals($expected, $parser->getReceivedMessages());
+    }
+
+    public function requestDataProvider()
+    {
+        return [
+            '何も受信できなかった場合' => [
+                'expected' => new Collection(),
+                'content' => '',
+            ],
+            'メッセージ情報がある場合' => [
+                'expected' => new Collection([
+                    new ReceivedMessage('b38e061600xxxxxxxxxxxxxxxxxxxxxx', '今日の天気は？'),
+                    new ReceivedMessage('d3efdfea30xxxxxxxxxxxxxxxxxxxxxx', '後ウマイヤ朝の最盛期王は？'),
+                ]),
+                'content' => '{"events":[{"type":"message","replyToken":"b38e061600xxxxxxxxxxxxxxxxxxxxxx","source":{"userId":"U0123456789xxxxxxxxxxxxxxxxxxxxxx","type":"user"},"timestamp":1613261905163,"mode":"active","message":{"type":"text","id":"13553668987962","text":"今日の天気は？"}},{"type":"message","replyToken":"d3efdfea30xxxxxxxxxxxxxxxxxxxxxx","source":{"userId":"U0123456789xxxxxxxxxxxxxxxxxxxxxx","type":"user"},"timestamp":1613261905163,"mode":"active","message":{"type":"text","id":"13553668987962","text":"後ウマイヤ朝の最盛期王は？"}}],"destination":"U0123456789xxxxxxxxxxxxxxxxxxxxxx"}',
+            ],
+            'メッセージ情報がない場合' => [
+                'expected' => new Collection(),
+                'content' => '{"events":[],"destination":"U0123456789xxxxxxxxxxxxxxxxxxxxxx"}',
+            ],
+        ];
     }
 }

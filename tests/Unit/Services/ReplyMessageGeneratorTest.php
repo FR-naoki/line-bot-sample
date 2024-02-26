@@ -14,7 +14,7 @@ class ReplyMessageGeneratorTest extends TestCase
      * 
      * @return void
      */
-    public function testGenerator($expected, $test)
+    public function testGenerator($expected, $text)
     {
         $replyMessageGenerator = new ReplyMessageGenerator();
         $this->assertSame($expected, $replyMessageGenerator->generate($text));

@@ -11,7 +11,9 @@ class RequestParser
 
     public function __construct(String $content)
     {
-        $this->content = json_decode($content->getContent());
+        $this->content = json_decode(
+            $content
+        );
     }
     public function getReceivedMessages(): Collection
     {

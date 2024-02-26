@@ -25,5 +25,6 @@ class ReplyMessageGenerator
                     $replyMessage = 'すみません、よくわかりません';
                 }
         }
+        return $replyMessage; // 修正: ここで返信メッセージを返す
     }
 }
