@@ -5,11 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Services\Deliverer;
 use App\Services\ReplyMessageGenerator;
+use App\Services\RequestParser;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use LINE\LINEBot;
-use LINE\LINEBot\HTTPClient\CurlHTTPClient;
-use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 
 
 class LineController extends Controller
