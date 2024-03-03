@@ -13,6 +13,10 @@ class ReplyMessageGenerator
                 break;
             case '元気？':
                 $replyMessage = 'はい、元気です。あなたは？';
+
+
+
+
                 break;
             case '後ウマイヤ朝の最盛期王は？':
                 $replyMessage = 'アブド＝アッラフマーン３世';
