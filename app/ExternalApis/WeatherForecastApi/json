@@ -1,0 +1,35 @@
+{
+    "lat": 34.7037,
+    "lon": 135.4963,
+    "timezone": "Asia/Tokyo",
+    "timezone_offset": 32400,
+    "daily": [
+        {
+            "dt": 1613185200,
+            "sunrise": 1613166369,
+            "sunset": 1613205511,
+            "temp": {
+                "day": 288.36,
+                "min": 282.66,
+                "max": 290.2,
+                "night": 285.63,
+                "eve": 288.22,
+                "morn": 282.71
+            },
+            "feels_like": {
+                "day": 286.44,
+                "night": 284.17,
+                "eve": 285.78,
+                "morn": 280.21
+            },
+            "pressure": 1026,
+            "humidity": 52,
+            "dew_point": 278.81,
+            "wind_speed": 1.26,
+            "wind_deg": 9,
+            "clouds": 72,
+            "pop": 0,
+            "uvi": 3.65
+        }
+    ]
+}
