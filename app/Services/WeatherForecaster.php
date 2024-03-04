@@ -24,7 +24,7 @@ class WeatherForecaster
     }
 
     /**
-     * して押された緯度・経度から天気予報を取得
+     * 指定された緯度・経度から天気予報を取得
      * 
      * @return string  天気予報の文字
      */

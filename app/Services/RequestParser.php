@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use APP\Models\ReceivedMessage;
+use App\Models\ReceivedMessage;
 use Illuminate\Support\Collection;
 
 class RequestParser
